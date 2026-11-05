@@ -1,0 +1,20 @@
+{
+  "name": "모임캐디 — 골프 모임 리그",
+  "short_name": "모임캐디",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0C3B2E",
+  "theme_color": "#0C3B2E",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
