@@ -856,7 +856,7 @@ const NO_TOKEN=['checkAccessCode','checkAccess'];
 function api(fn,...args){
   if(!NO_TOKEN.includes(fn))args=[ACC,...args];
   const p=IS_GAS?new Promise((ok,no)=>google.script.run.withSuccessHandler(ok).withFailureHandler(e=>no(e))[fn](...args))
-    :(REMOTE_API?fetch(REMOTE_API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'mt.api',params:{fn:fn,args:args}})}).then(r=>r.json()).then(j=>{if(!j.ok)throw new Error(j.error||'서버 오류');return j.data;})
+    :(REMOTE_API?fetch(REMOTE_API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'mt.api',params:{fn:fn,args:args}})}).then(r=>r.json()).then(j=>{if(j&&typeof j==='object'&&j.ok===false&&j.error)throw new Error(j.error);return j;})
     :new Promise((ok,no)=>{try{ok(Mock[fn](...args))}catch(e){no(e)}})); // 앱 모드: 원격 API / 미리보기
   return p.catch(e=>{if(/ACCESS_DENIED/.test((e&&e.message)||String(e)))lockApp('인증이 만료되었습니다. 다시 입력해 주세요.');throw e});
 }
