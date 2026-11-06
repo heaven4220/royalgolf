@@ -958,8 +958,8 @@ const Mock=(()=>{
   members.slice(0,24).forEach((m,i)=>L('2026-0'+(1+i%3)+'-1'+(i%9),'fee',m.id,3000000,'2026년 연회비'));L('2026-02-10','fee','m25',1500000,'2026년 연회비 (분납)');
   rounds.slice(0,8).forEach((rd,k)=>{members.forEach(m=>{const g=rd.scores[m.id];if(g==null||r()<.3)return;const f=Math.min(Math.abs(g-rd.par-m.declared)*100000,500000);if(f)L(rd.date,'fine',m.id,f,(k+1)+'월 벌금',rd.id)});
     L(rd.date,'meal','',Math.round((2500000+r()*2000000)/10000)*10000,(k+1)+'월 월례회 식사');if(k%3===1)L(rd.date,'sponsor',members[k].id,1000000,(k+1)+'월 찬조');if(k%4===2)L(rd.date,'etc','',Math.round((300000+r()*900000)/10000)*10000,'시상 상품')});
-  const D=()=>JSON.parse(JSON.stringify({settings:st,members,rounds,ledger,holes:{},isAdmin:PW==='1234',version:APP_VERSION}));
-  const chk=pw=>{if(pw!=='1234')throw new Error('관리자 비밀번호가 올바르지 않습니다.')};
+  const D=()=>JSON.parse(JSON.stringify({settings:st,members,rounds,ledger,holes:{},isAdmin:PW==='__MOCK__',version:APP_VERSION}));
+  const chk=pw=>{if(pw!=='__MOCK__')throw new Error('관리자 비밀번호가 올바르지 않습니다.')};
   const MockLive=(()=>{const pars=[4,4,3,5,4,4,3,4,5,4,4,3,5,4,4,3,4,5];const groups={};members.slice(0,16).forEach((m,i)=>groups[m.id]=Math.floor(i/4)+1);
     const sc={};members.slice(0,16).forEach((m,i)=>{const thru=[14,14,14,14,11,11,11,11,8,8,8,8,5,5,5,5][i];sc[m.id]=pars.map((p,h)=>h<thru?p+Math.max(-1,Math.round((r()-.35)*(1+m.declared/10))):null)});
     const t0=Date.now()-4*3600e3,tm={};members.slice(0,16).forEach((m,i)=>tm[m.id]=sc[m.id].map((v,h)=>v==null?0:t0+h*13*60e3+(i%4)*40e3+Math.floor(i/4)*9*60e3));
@@ -971,7 +971,7 @@ const Mock=(()=>{
       const g=h%3!==0;L.push({no:L.length+1,type:'SHOT',club:cl[h%5],before:left,dist:left,dir:g?'CENTER':'RIGHT',res:g?'GREEN':'ROUGH',miss:g?'':'SHORT',pen:0});if(!g)L.push({no:L.length+1,type:'SHOT',club:'SW',before:15,dist:13,dir:'CENTER',res:'GREEN',miss:'',pen:0})}
       else L.push({no:1,type:'TEE',club:'8I',before:dd,dist:dd,dir:'CENTER',res:h%2?'GREEN':'BUNKER',miss:h%2?'':'LEFT',pen:0});
       L.push({no:L.length+1,type:'PUTT',club:'PT',before:Math.round((2+r()*8)*10)/10,putts:h%6===0?3:h%4===0?1:2,pen:0});data.m0[h]=L}
-    return{dists,data,pins:{m0:'1234'}}})();
+    return{dists,data,pins:{m0:'__MOCK__'}}})();
   const MockR=(()=>{
     const now=()=>new Date().toISOString();
     const evs=[{eventId:'ev1',name:'10월 정기 라운딩',date:'2026-10-18',course:'땀다오',firstTee:'07:30',teeGap:8,fee:2500000,signupStart:'2026-10-01',signupEnd:'2026-10-12',notice:'10/18(일) 07:30 첫 티입니다.\n참석 여부와 게스트를 10/12까지 등록해 주세요.',bank:'국민은행 123-456-789 (총무)',status:'모집중'},
@@ -1010,7 +1010,7 @@ const Mock=(()=>{
         guests:gu.filter(g=>g.eventId===id).map(g=>Object.assign({},g,{mine:g.invitedBy===me})),
         payments:ps.map(p=>Object.assign({},p)),pay:{expect:expect,paid:paid,remain:expect-paid,done:done,wait:wait},groups:groups,
         warnings:[],live:(e.status==='최종확정')?{id:'ev2',status:'closed'}:null,
-        me:{mid:me,admin:pw==='1234',treasurer:pw==='1234'||me==='m2'},treasurerIds:'m2'}};
+        me:{mid:me,admin:pw==='__MOCK__',treasurer:pw==='__MOCK__'||me==='m2'},treasurerIds:'m2'}};
     const sizesOf=len=>{const g=Math.floor(len/4),r=len%4,s=[];for(let i=0;i<g;i++)s.push(4);if(r===3)s.push(3);else if(r>0)s.push(r);if(!s.length)s.push(len);return s};
     const snake=(list,sizes)=>{const sorted=list.slice().sort((a,b)=>b.handicap-a.handicap),cap=sizes.slice(),gs=sizes.map(()=>[]);let i=0,r=0;
       while(i<sorted.length){const order=cap.map((_,k)=>k);if(r%2)order.reverse();let placed=false;
@@ -1018,12 +1018,12 @@ const Mock=(()=>{
         if(!placed)break;r++}
       while(i<sorted.length)gs[gs.length-1].push(sorted[i++]);return gs};
     return{
-      list:(pw,pt)=>{const me=midOf(pt);return{me:{mid:me,admin:pw==='1234',treasurer:pw==='1234'||me==='m2'},
+      list:(pw,pt)=>{const me=midOf(pt);return{me:{mid:me,admin:pw==='__MOCK__',treasurer:pw==='__MOCK__'||me==='m2'},
         rounds:evs.map(e=>{const a=me?att.find(x=>x.eventId===e.eventId&&x.memberId===me):null;
           return{eventId:e.eventId,name:e.name,date:e.date,course:e.course,status:e.status,firstTee:e.firstTee,fee:e.fee,counts:counts(e.eventId),myStatus:a?a.status:'',myPref:a?a.pref:'',liveId:e.status==='최종확정'?'ev2':''}})}},
       detail:(pw,pt,id)=>detail(id,pt,pw),
-      saveEvent:(pw,o)=>{if(pw!=='1234')throw new Error('관리자 비밀번호가 올바르지 않습니다.');const id=o.eventId||'ev'+Date.now(),i=evs.findIndex(x=>x.eventId===id),row=Object.assign({},o,{eventId:id});if(i>=0)evs[i]=row;else evs.push(row);return detail(id,'',pw)},
-      att:(pw,pt,id,mid,st,pf,ga)=>{const me=midOf(pt);if(pw!=='1234'&&me!==mid)throw new Error('본인 참석만 변경할 수 있습니다.');
+      saveEvent:(pw,o)=>{if(pw!=='__MOCK__')throw new Error('관리자 비밀번호가 올바르지 않습니다.');const id=o.eventId||'ev'+Date.now(),i=evs.findIndex(x=>x.eventId===id),row=Object.assign({},o,{eventId:id});if(i>=0)evs[i]=row;else evs.push(row);return detail(id,'',pw)},
+      att:(pw,pt,id,mid,st,pf,ga)=>{const me=midOf(pt);if(pw!=='__MOCK__'&&me!==mid)throw new Error('본인 참석만 변경할 수 있습니다.');
         const i=att.findIndex(a=>a.eventId===id&&a.memberId===mid),m=members.find(x=>x.id===mid)||{name:mid,declared:0},e=evs.find(x=>x.eventId===id);
         if(st==='참석'){const row={eventId:id,memberId:mid,memberName:m.name,status:'참석',pref:pf==='내기'?'내기':'명랑',handicap:m.declared};
           if(i>=0)att[i]=row;else att.push(row);
@@ -1033,18 +1033,18 @@ const Mock=(()=>{
           pay.splice(0,pay.length,...pay.filter(p=>p.payId!==id+'|회원|'+mid));
           if(ga==='cancel'){gu.filter(g=>g.eventId===id&&g.invitedBy===mid).slice().forEach(g=>{const k=gu.indexOf(g);if(k>=0)gu.splice(k,1);pay.splice(0,pay.length,...pay.filter(p=>p.payerId!==g.guestId))})}}
         return detail(id,pt,pw)},
-      guest:(pw,pt,id,g)=>{const me=midOf(pt),by=(pw==='1234'&&g.invitedBy)?g.invitedBy:me;if(!by)throw new Error('초청 회원을 지정하세요.');
-        let row;if(g.guestId){row=gu.find(x=>x.guestId===g.guestId);if(!row)throw new Error('게스트를 찾을 수 없습니다.');if(pw!=='1234'&&row.invitedBy!==me)throw new Error('본인이 등록한 게스트만 수정할 수 있습니다.')}
+      guest:(pw,pt,id,g)=>{const me=midOf(pt),by=(pw==='__MOCK__'&&g.invitedBy)?g.invitedBy:me;if(!by)throw new Error('초청 회원을 지정하세요.');
+        let row;if(g.guestId){row=gu.find(x=>x.guestId===g.guestId);if(!row)throw new Error('게스트를 찾을 수 없습니다.');if(pw!=='__MOCK__'&&row.invitedBy!==me)throw new Error('본인이 등록한 게스트만 수정할 수 있습니다.')}
         else{row={guestId:id+'_G'+Date.now(),eventId:id};gu.push(row)}
         Object.assign(row,{invitedBy:by,invitedByName:mname(by),name:g.name,handicap:+g.handicap||0,gender:g.gender||'',pref:g.pref==='내기'?'내기':'명랑',payType:g.payType==='개별'?'개별':'함께',memo:g.memo||''});
         if(!pay.some(p=>p.payerId===row.guestId))mkPay(id,'게스트',row.guestId,row.name,(evs.find(x=>x.eventId===id).fee)||0,row.payType==='함께'?by:'');
         return detail(id,pt,pw)},
-      delGuest:(pw,pt,id,gid)=>{const me=midOf(pt),g=gu.find(x=>x.guestId===gid);if(!g)throw new Error('게스트를 찾을 수 없습니다.');if(pw!=='1234'&&g.invitedBy!==me)throw new Error('본인이 등록한 게스트만 삭제할 수 있습니다.');
+      delGuest:(pw,pt,id,gid)=>{const me=midOf(pt),g=gu.find(x=>x.guestId===gid);if(!g)throw new Error('게스트를 찾을 수 없습니다.');if(pw!=='__MOCK__'&&g.invitedBy!==me)throw new Error('본인이 등록한 게스트만 삭제할 수 있습니다.');
         gu.splice(gu.indexOf(g),1);pay.splice(0,pay.length,...pay.filter(p=>p.payerId!==gid));return detail(id,pt,pw)},
-      pay:(pw,pt,id,pid,st,memo)=>{if(pw!=='1234'&&midOf(pt)!=='m2')throw new Error('총무 또는 관리자만 입금 상태를 변경할 수 있습니다.');
+      pay:(pw,pt,id,pid,st,memo)=>{if(pw!=='__MOCK__'&&midOf(pt)!=='m2')throw new Error('총무 또는 관리자만 입금 상태를 변경할 수 있습니다.');
         [].concat(pid).forEach(k=>{const p=pay.find(x=>x.payId===k);if(p){p.state=st;if(st==='입금완료'){p.confirmedBy='김성환';p.confirmedAt=now()}else{p.confirmedBy='';p.confirmedAt=''}}});
         return detail(id,pt,pw)},
-      auto:(pw,id)=>{if(pw!=='1234')throw new Error('관리자 비밀번호가 올바르지 않습니다.');
+      auto:(pw,id)=>{if(pw!=='__MOCK__')throw new Error('관리자 비밀번호가 올바르지 않습니다.');
         const d=detail(id,'',pw),people=[];
         d.attendance.filter(a=>a.status==='참석').forEach(a=>people.push({pid:a.memberId,ptype:'회원',name:a.name,handicap:a.handicap,pref:a.pref||'명랑'}));
         d.guests.forEach(g=>people.push({pid:g.guestId,ptype:'게스트',name:g.name,handicap:g.handicap,pref:g.pref||'명랑'}));
@@ -1055,24 +1055,24 @@ const Mock=(()=>{
         if(bet.length)emit(snake(bet,sizesOf(bet.length)));
         if(fun.length)emit(snake(fun,sizesOf(fun.length)));
         return detail(id,'',pw)},
-      saveGroups:(pw,id,rows)=>{if(pw!=='1234')throw new Error('관리자 비밀번호가 올바르지 않습니다.');grp.splice(0,grp.length,...grp.filter(r=>r.eventId!==id));rows.forEach((r,i)=>grp.push(Object.assign({},r,{eventId:id,seq:r.seq||i+1})));return detail(id,'',pw)},
-      finalize:(pw,id)=>{if(pw!=='1234')throw new Error('관리자 비밀번호가 올바르지 않습니다.');const d=detail(id,'',pw);
+      saveGroups:(pw,id,rows)=>{if(pw!=='__MOCK__')throw new Error('관리자 비밀번호가 올바르지 않습니다.');grp.splice(0,grp.length,...grp.filter(r=>r.eventId!==id));rows.forEach((r,i)=>grp.push(Object.assign({},r,{eventId:id,seq:r.seq||i+1})));return detail(id,'',pw)},
+      finalize:(pw,id)=>{if(pw!=='__MOCK__')throw new Error('관리자 비밀번호가 올바르지 않습니다.');const d=detail(id,'',pw);
         if(!d.groups.length)return{ok:false,errors:['조편성이 없습니다. 먼저 자동 조편성을 실행하세요.'],detail:d};
         const errs=[],seen={};d.groups.forEach(g=>{if(g.members.length>4)errs.push(g.groupNo+'조가 '+g.members.length+'명입니다.');g.members.forEach(m=>{if(seen[m.pid])errs.push('중복 배정: '+m.name);seen[m.pid]=1})});
         d.attendance.filter(a=>a.status==='참석'&&!seen[a.memberId]).forEach(a=>errs.push('미배정: '+a.name));
         d.guests.forEach(g=>{if(!seen[g.guestId])errs.push('미배정 게스트: '+g.name)});
         if(errs.length)return{ok:false,errors:errs.slice(0,8),detail:d};
         evs.find(x=>x.eventId===id).status='최종확정';return{ok:true,detail:detail(id,'',pw)}},
-      status:(pw,id,st)=>{if(pw!=='1234')throw new Error('관리자 비밀번호가 올바르지 않습니다.');evs.find(x=>x.eventId===id).status=st;return detail(id,'',pw)},
-      link:(pw,id)=>{if(pw!=='1234')throw new Error('관리자 비밀번호가 올바르지 않습니다.');evs.find(x=>x.eventId===id).status='최종확정';return{liveId:'ev2',detail:detail(id,'',pw)}},
-      del:(pw,id)=>{if(pw!=='1234')throw new Error('관리자 비밀번호가 올바르지 않습니다.');
+      status:(pw,id,st)=>{if(pw!=='__MOCK__')throw new Error('관리자 비밀번호가 올바르지 않습니다.');evs.find(x=>x.eventId===id).status=st;return detail(id,'',pw)},
+      link:(pw,id)=>{if(pw!=='__MOCK__')throw new Error('관리자 비밀번호가 올바르지 않습니다.');evs.find(x=>x.eventId===id).status='최종확정';return{liveId:'ev2',detail:detail(id,'',pw)}},
+      del:(pw,id)=>{if(pw!=='__MOCK__')throw new Error('관리자 비밀번호가 올바르지 않습니다.');
         const i=evs.findIndex(x=>x.eventId===id);if(i>=0)evs.splice(i,1);
         att.splice(0,att.length,...att.filter(x=>x.eventId!==id));gu.splice(0,gu.length,...gu.filter(x=>x.eventId!==id));
         pay.splice(0,pay.length,...pay.filter(x=>x.eventId!==id));grp.splice(0,grp.length,...grp.filter(x=>x.eventId!==id));return{ok:true}}
     };
   })();
 
-  const Mock={getData:()=>D(),checkAdmin:pw=>pw==='1234',
+  const Mock={getData:()=>D(),checkAdmin:pw=>pw==='__MOCK__',
     saveMember:(pw,m)=>{chk(pw);const i=members.findIndex(x=>x.id===m.id);if(i>=0)members[i]={...members[i],...m};else members.push({...m,id:'m'+Date.now()});return D()},
     setRival:(pw,id,rid)=>{const m=members.find(x=>x.id===id);m.rival=rid||'';return D()},
     deleteMember:(pw,id)=>{chk(pw);members.splice(members.findIndex(x=>x.id===id),1);return D()},
@@ -1081,7 +1081,7 @@ const Mock=(()=>{
     saveSettings:(pw,o)=>{chk(pw);Object.assign(st,o);return D()},
     saveLedger:(pw,e)=>{chk(pw);const i=ledger.findIndex(x=>x.id===e.id);const o={...e,id:e.id||'l'+(++lid)};if(i>=0)ledger[i]=o;else ledger.push(o);return D()},
     deleteLedger:(pw,ids)=>{chk(pw);[].concat(ids).forEach(id=>{const i=ledger.findIndex(x=>x.id===id);if(i>=0)ledger.splice(i,1)});return D()},
-    getLive:(pw)=>{const ev=MockLive.ev;return JSON.parse(JSON.stringify({version:1,event:ev?{...ev,pins:pw==='1234'?ev.pins:undefined}:null,scores:MockLive.sc,times:MockLive.tm,messages:MockLive.msgs,members:members.map(m=>({id:m.id,name:m.name,declared:m.declared,memo:m.memo,rival:m.rival||''}))}))},
+    getLive:(pw)=>{const ev=MockLive.ev;return JSON.parse(JSON.stringify({version:1,event:ev?{...ev,pins:pw==='__MOCK__'?ev.pins:undefined}:null,scores:MockLive.sc,times:MockLive.tm,messages:MockLive.msgs,members:members.map(m=>({id:m.id,name:m.name,declared:m.declared,memo:m.memo,rival:m.rival||''}))}))},
     postLiveMessage:(id,mid,t)=>{MockLive.msgs.push({id:'g'+Date.now(),memberId:mid,text:String(t).slice(0,60),ts:Date.now()});return Mock.getLive('mock-token','')},
     deleteLiveMessage:(pw,id)=>{chk(pw);MockLive.msgs=MockLive.msgs.filter(x=>x.id!==id);return Mock.getLive('mock-token',pw)},
     checkGroupPin:(id,g,p)=>MockLive.ev.pins[g]===p,
@@ -1132,9 +1132,9 @@ const Mock=(()=>{
     importAll:()=>{throw new Error('미리보기에서는 불러오기를 할 수 없습니다')}};
   // 미리보기: 공용 비밀번호 0000 (실제 앱은 서버의 ACCESS_CODE 사용)
   const plain={...Mock};Object.keys(plain).forEach(k=>{Mock[k]=(tok,...a)=>{if(tok!=='mock-token')throw new Error('ACCESS_DENIED');return plain[k](...a)}});
-  Mock.checkAccessCode=c=>c==='0000'?{ok:true,token:'mock-token',days:30}:{ok:false};
+  Mock.checkAccessCode=c=>c==='__MOCK__'?{ok:true,token:'mock-token',days:30}:{ok:false};
   Mock.checkAccess=t=>t==='mock-token';
-  Mock.changeAccessCode=(t,pw,c)=>{if(pw!=='1234')throw new Error('관리자 비밀번호가 올바르지 않습니다.');return{ok:true,token:'mock-token'}};
+  Mock.changeAccessCode=(t,pw,c)=>{if(pw!=='__MOCK__')throw new Error('관리자 비밀번호가 올바르지 않습니다.');return{ok:true,token:'mock-token'}};
   return Mock;
 })();
 
@@ -4704,6 +4704,8 @@ function hofSubs() {
 
 
 </script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","spa":2}' crossorigin="anonymous"></script>
+<script src="app-enhance.js?v=9" defer></script>
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","spa":2}' crossorigin="anonymous"></script>
 </body>
 </html>
